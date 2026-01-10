@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBox Grid.Row="0"
@@ -29,15 +30,24 @@
                      VerticalContentAlignment="Center"/>
         </StackPanel>
 
-        <Button Grid.Row="2"
-                Content="Decompress Files"
-                Command="{Binding DecompressFilesCommand}"
-                IsEnabled="{Binding IsDecompressing, Converter={StaticResource InverseBooleanConverter}}"
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Operation:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding AvailableOperations}"
+                      SelectedItem="{Binding SelectedOperation}"
+                      MinWidth="200"/>
+        </StackPanel>
+
+        <Button Grid.Row="3"
+                Content="Execute Operation"
+                Command="{Binding ExecuteOperationCommand}"
+                IsEnabled="{Binding IsExecuting, Converter={StaticResource InverseBooleanConverter}}"
                 Margin="10"
                 Padding="10,5"
                 HorizontalAlignment="Left"/>
 
-        <TextBlock Grid.Row="3"
+        <TextBlock Grid.Row="4"
                    Text="{Binding StatusMessage}"
                    Margin="10"
                    FontWeight="Bold"/>

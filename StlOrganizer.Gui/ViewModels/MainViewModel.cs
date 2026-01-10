@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using StlOrganizer.Library;
 
@@ -6,7 +7,21 @@ namespace StlOrganizer.Gui.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    private readonly FileDecompressor fileDecompressor = new();
+    private readonly OperationSelector operationSelector;
+
+    public MainViewModel(OperationSelector operationSelector)
+    {
+        this.operationSelector = operationSelector;
+        AvailableOperations =
+        [
+            OperationType.FileDecompressor,
+            OperationType.FolderCompressor,
+            OperationType.ImageOrganizer
+        ];
+        SelectedOperation = OperationType.FileDecompressor;
+    }
+
+    public ObservableCollection<OperationType> AvailableOperations { get; }
 
     [ObservableProperty]
     private string title = "Stl Organizer";
@@ -18,7 +33,10 @@ public partial class MainViewModel : ObservableObject
     private string selectedDirectory = string.Empty;
 
     [ObservableProperty]
-    private bool isDecompressing;
+    private OperationType selectedOperation;
+
+    [ObservableProperty]
+    private bool isExecuting;
 
     [ObservableProperty]
     private string statusMessage = string.Empty;
@@ -40,7 +58,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task DecompressFilesAsync()
+    private async Task ExecuteOperationAsync()
     {
         if (string.IsNullOrWhiteSpace(SelectedDirectory))
         {
@@ -50,13 +68,11 @@ public partial class MainViewModel : ObservableObject
 
         try
         {
-            IsDecompressing = true;
-            StatusMessage = "Decompressing files...";
+            IsExecuting = true;
+            StatusMessage = $"Executing {SelectedOperation}...";
 
-            var extractedFiles = await fileDecompressor.ScanAndDecompressAsync(SelectedDirectory);
-            var fileCount = extractedFiles.Count();
-
-            StatusMessage = $"Successfully extracted {fileCount} file(s).";
+            var result = await operationSelector.ExecuteOperationAsync(SelectedOperation, SelectedDirectory);
+            StatusMessage = result;
         }
         catch (Exception ex)
         {
@@ -64,7 +80,7 @@ public partial class MainViewModel : ObservableObject
         }
         finally
         {
-            IsDecompressing = false;
+            IsExecuting = false;
         }
     }
 }
