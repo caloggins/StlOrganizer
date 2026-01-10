@@ -1,24 +1,15 @@
 ﻿namespace StlOrganizer.Library;
 
-public class FolderFlattener
+public class FolderFlattener(IDirectoryService directoryService)
 {
-    private readonly IDirectoryService directoryService;
-
     public FolderFlattener() : this(new DirectoryServiceAdapter())
     {
-    }
-
-    public FolderFlattener(IDirectoryService directoryService)
-    {
-        this.directoryService = directoryService;
     }
 
     public void RemoveNestedFolders(string rootPath)
     {
         if (!directoryService.Exists(rootPath))
-        {
             throw new DirectoryNotFoundException($"Directory not found: {rootPath}");
-        }
 
         ProcessDirectory(rootPath);
     }
@@ -29,10 +20,7 @@ public class FolderFlattener
 
         foreach (var subdirectory in subdirectories)
         {
-            // First process nested directories recursively
             ProcessDirectory(subdirectory);
-
-            // Then check if this subdirectory should be flattened
             FlattenIfMatching(directoryPath, subdirectory);
         }
     }
@@ -44,10 +32,7 @@ public class FolderFlattener
 
         if (string.Equals(parentName, childName, StringComparison.OrdinalIgnoreCase))
         {
-            // Move all contents from child to parent
             directoryService.Move(childPath, parentPath);
-
-            // Delete the now-empty child directory
             directoryService.Delete(childPath, recursive: false);
         }
     }
