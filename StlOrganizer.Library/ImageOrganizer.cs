@@ -2,29 +2,14 @@
 
 namespace StlOrganizer.Library;
 
-public class ImageOrganizer
+public class ImageOrganizer(IFileSystem fileSystem, IFileOperations fileOperations, ILogger logger) : IImageOrganizer
 {
-    private readonly IFileSystem fileSystem;
-    private readonly IFileOperations fileOperations;
-    private readonly ILogger logger;
-    
     private static readonly string[] ImageExtensions =
     {
         ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".tif", ".webp", ".svg"
     };
 
     private const string ImagesFolderName = "Images";
-
-    public ImageOrganizer() : this(new FileSystemAdapter(), new FileOperationsAdapter(), Log.Logger)
-    {
-    }
-
-    public ImageOrganizer(IFileSystem fileSystem, IFileOperations fileOperations, ILogger logger)
-    {
-        this.fileSystem = fileSystem;
-        this.fileOperations = fileOperations;
-        this.logger = logger;
-    }
 
     public async Task<int> OrganizeImagesAsync(string rootPath)
     {
@@ -52,9 +37,7 @@ public class ImageOrganizer
         var copiedCount = 0;
 
         if (Path.GetFullPath(currentPath) == Path.GetFullPath(imagesFolder))
-        {
             return copiedCount;
-        }
 
         var files = fileSystem.GetFiles(currentPath, "*.*", SearchOption.TopDirectoryOnly);
         

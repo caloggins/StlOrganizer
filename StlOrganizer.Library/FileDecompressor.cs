@@ -6,24 +6,12 @@ using ZipFile = ICSharpCode.SharpZipLib.Zip.ZipFile;
 
 namespace StlOrganizer.Library;
 
-public class FileDecompressor
+public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDecompressor
 {
-    private readonly IFileSystem fileSystem;
-    private readonly ILogger logger;
     private static readonly string[] CompressedExtensions =
-    {
+    [
         ".zip", ".gz", ".7z", ".rar", ".tar", ".tar.gz", ".tgz"
-    };
-
-    public FileDecompressor() : this(new FileSystemAdapter(), Log.Logger)
-    {
-    }
-
-    public FileDecompressor(IFileSystem fileSystem, ILogger logger)
-    {
-        this.fileSystem = fileSystem;
-        this.logger = logger;
-    }
+    ];
 
     public async Task<IEnumerable<string>> ScanAndDecompressAsync(string directoryPath)
     {
@@ -123,7 +111,7 @@ public class FileDecompressor
         using var outputStream = fileSystem.CreateFile(outputFileName);
         gzipStream.CopyTo(outputStream);
 
-        return new List<string> { outputFileName };
+        return [outputFileName];
     }
 
     private List<string> DecompressTar(string tarPath, string outputDirectory)
