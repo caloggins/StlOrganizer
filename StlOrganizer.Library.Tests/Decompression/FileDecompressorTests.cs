@@ -1,8 +1,10 @@
 using FakeItEasy;
 using Serilog;
 using Shouldly;
+using StlOrganizer.Library.Decompression;
+using StlOrganizer.Library.SystemFileAdapters;
 
-namespace StlOrganizer.Library.Tests;
+namespace StlOrganizer.Library.Tests.Decompression;
 
 public class FileDecompressorTests
 {

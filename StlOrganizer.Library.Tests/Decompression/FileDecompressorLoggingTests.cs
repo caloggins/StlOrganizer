@@ -3,8 +3,10 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.InMemory;
 using Shouldly;
+using StlOrganizer.Library.Decompression;
+using StlOrganizer.Library.SystemFileAdapters;
 
-namespace StlOrganizer.Library.Tests;
+namespace StlOrganizer.Library.Tests.Decompression;
 
 public class FileDecompressorLoggingTests
 {
