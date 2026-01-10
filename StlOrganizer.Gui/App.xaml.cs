@@ -3,6 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using StlOrganizer.Gui.ViewModels;
 using StlOrganizer.Library;
+using StlOrganizer.Library.Compression;
+using StlOrganizer.Library.Decompression;
+using StlOrganizer.Library.ImageProcessing;
+using StlOrganizer.Library.SystemFileAdapters;
 
 namespace StlOrganizer.Gui;
 

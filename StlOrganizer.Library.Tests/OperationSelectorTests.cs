@@ -1,6 +1,9 @@
 ﻿using FakeItEasy;
 using Serilog;
 using Shouldly;
+using StlOrganizer.Library.Compression;
+using StlOrganizer.Library.Decompression;
+using StlOrganizer.Library.ImageProcessing;
 
 namespace StlOrganizer.Library.Tests;
 

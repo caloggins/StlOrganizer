@@ -1,4 +1,7 @@
 ﻿using Serilog;
+using StlOrganizer.Library.Compression;
+using StlOrganizer.Library.Decompression;
+using StlOrganizer.Library.ImageProcessing;
 
 namespace StlOrganizer.Library;
 
