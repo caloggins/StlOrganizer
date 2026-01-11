@@ -6,7 +6,7 @@ using StlOrganizer.Library.ImageProcessing;
 namespace StlOrganizer.Library;
 
 public class OperationSelector(
-    IFileDecompressor fileDecompressor,
+    IDecompressionWorkflow decompressionWorkflow,
     IFolderCompressor folderCompressor,
     IImageOrganizer imageOrganizer,
     ILogger logger) : IOperationSelector
@@ -24,10 +24,10 @@ public class OperationSelector(
 
     private async Task<string> ExecuteFileDecompressorAsync(string directoryPath)
     {
-        var extractedFiles = await fileDecompressor.ScanAndDecompressAsync(directoryPath);
+        var extractedFiles = await decompressionWorkflow.ExecuteAsync(directoryPath);
         var fileCount = extractedFiles.Count();
-        logger.Information("FileDecompressor extracted {fileCount} files", fileCount);
-        return $"Successfully extracted {fileCount} file(s).";
+        logger.Information("DecompressionWorkflow extracted {fileCount} files", fileCount);
+        return $"Successfully extracted {fileCount} file(s) and flattened folders.";
     }
 
     private Task<string> ExecuteFolderCompressorAsync(string directoryPath)

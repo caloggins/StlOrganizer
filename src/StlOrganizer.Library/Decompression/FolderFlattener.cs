@@ -2,12 +2,8 @@
 
 namespace StlOrganizer.Library.Decompression;
 
-public class FolderFlattener(IDirectoryService directoryService)
+public class FolderFlattener(IDirectoryService directoryService) : IFolderFlattener
 {
-    public FolderFlattener() : this(new DirectoryServiceAdapter())
-    {
-    }
-
     public void RemoveNestedFolders(string rootPath)
     {
         if (!directoryService.Exists(rootPath))

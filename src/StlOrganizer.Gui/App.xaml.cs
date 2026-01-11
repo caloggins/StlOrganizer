@@ -34,10 +34,13 @@ public partial class App : Application
         services.AddSingleton(Log.Logger);
         services.AddSingleton<IFileSystem, FileSystemAdapter>();
         services.AddSingleton<IFileOperations, FileOperationsAdapter>();
+        services.AddSingleton<IDirectoryService, DirectoryServiceAdapter>();
         services.AddSingleton<IZipArchiveFactory, ZipArchiveFactory>();
-        services.AddSingleton<FileDecompressor>();
-        services.AddSingleton<ImageOrganizer>();
-        services.AddSingleton<FolderCompressor>();
+        services.AddSingleton<IFileDecompressor, FileDecompressor>();
+        services.AddSingleton<IFolderFlattener, FolderFlattener>();
+        services.AddSingleton<IDecompressionWorkflow, DecompressionWorkflow>();
+        services.AddSingleton<IImageOrganizer, ImageOrganizer>();
+        services.AddSingleton<IFolderCompressor, FolderCompressor>();
         services.AddSingleton<IOperationSelector, OperationSelector>();
         services.AddTransient<MainViewModel>();
         services.AddTransient<MainWindow>();

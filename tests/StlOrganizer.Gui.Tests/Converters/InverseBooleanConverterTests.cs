@@ -6,14 +6,8 @@ namespace StlOrganizer.Gui.Tests.Converters;
 
 public class InverseBooleanConverterTests
 {
-    private readonly InverseBooleanConverter converter;
-    private readonly CultureInfo culture;
-
-    public InverseBooleanConverterTests()
-    {
-        converter = new InverseBooleanConverter();
-        culture = CultureInfo.InvariantCulture;
-    }
+    private readonly InverseBooleanConverter converter = new();
+    private readonly CultureInfo culture = CultureInfo.InvariantCulture;
 
     [Fact]
     public void Convert_WithTrue_ReturnsFalse()

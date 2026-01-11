@@ -8,7 +8,7 @@ namespace StlOrganizer.Library.Tests.Decompression;
 public class FolderFlattenerTests
 {
     private readonly IDirectoryService directoryService;
-    private readonly FolderFlattener flattener;
+    private readonly IFolderFlattener flattener;
 
     public FolderFlattenerTests()
     {

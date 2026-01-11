@@ -9,26 +9,26 @@ namespace StlOrganizer.Library.Tests;
 
 public class OperationSelectorTests
 {
-    private readonly IFileDecompressor fileDecompressor = A.Fake<IFileDecompressor>();
+    private readonly IDecompressionWorkflow decompressionWorkflow = A.Fake<IDecompressionWorkflow>();
     private readonly IFolderCompressor folderCompressor = A.Fake<IFolderCompressor>();
     private readonly IImageOrganizer imageOrganizer = A.Fake<IImageOrganizer>();
 
     [Fact]
-    public async Task ExecuteOperationAsync_WithFileDecompressor_CallsFileDecompressorAndReturnsMessage()
+    public async Task ExecuteOperationAsync_WithFileDecompressor_CallsDecompressionWorkflowAndReturnsMessage()
     {
         const string directoryPath = @"C:\test";
         var logger = A.Fake<ILogger>();
         var extractedFiles = new List<string> { "file1.txt", "file2.txt", "file3.txt" };
-        
-        A.CallTo(() => fileDecompressor.ScanAndDecompressAsync(directoryPath))
+
+        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath))
             .Returns(Task.FromResult<IEnumerable<string>>(extractedFiles));
-        
-        var selector = new OperationSelector(fileDecompressor, folderCompressor, imageOrganizer, logger);
+
+        var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         var result = await selector.ExecuteOperationAsync(OperationType.FileDecompressor, directoryPath);
 
-        result.ShouldBe("Successfully extracted 3 file(s).");
-        A.CallTo(() => fileDecompressor.ScanAndDecompressAsync(directoryPath)).MustHaveHappenedOnceExactly();
+        result.ShouldBe("Successfully extracted 3 file(s) and flattened folders.");
+        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -37,11 +37,11 @@ public class OperationSelectorTests
         const string directoryPath = @"C:\test";
         const string outputPath = @"C:\test.zip";
         var logger = A.Fake<ILogger>();
-        
+
         A.CallTo(() => folderCompressor.CompressFolder(directoryPath, null))
             .Returns(outputPath);
-        
-        var selector = new OperationSelector(fileDecompressor, folderCompressor, imageOrganizer, logger);
+
+        var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         var result = await selector.ExecuteOperationAsync(OperationType.FolderCompressor, directoryPath);
 
@@ -56,11 +56,11 @@ public class OperationSelectorTests
         const int copiedCount = 5;
 
         var logger = A.Fake<ILogger>();
-        
+
         A.CallTo(() => imageOrganizer.OrganizeImagesAsync(directoryPath))
             .Returns(copiedCount);
-        
-        var selector = new OperationSelector(fileDecompressor, folderCompressor, imageOrganizer, logger);
+
+        var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         var result = await selector.ExecuteOperationAsync(OperationType.ImageOrganizer, directoryPath);
 
@@ -73,8 +73,8 @@ public class OperationSelectorTests
     {
         const string directoryPath = @"C:\test";
         var logger = A.Fake<ILogger>();
-        
-        var selector = new OperationSelector(fileDecompressor, folderCompressor, imageOrganizer, logger);
+
+        var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         await Should.ThrowAsync<ArgumentException>(async () =>
             await selector.ExecuteOperationAsync((OperationType)999, directoryPath));
@@ -87,14 +87,14 @@ public class OperationSelectorTests
         var logger = A.Fake<ILogger>();
         var extractedFiles = new List<string> { "file1.txt" };
         
-        A.CallTo(() => fileDecompressor.ScanAndDecompressAsync(directoryPath))
+        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath))
             .Returns(Task.FromResult<IEnumerable<string>>(extractedFiles));
         
-        var selector = new OperationSelector(fileDecompressor, folderCompressor, imageOrganizer, logger);
+        var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         await selector.ExecuteOperationAsync(OperationType.FileDecompressor, directoryPath);
 
-        A.CallTo(()=> logger.Information("FileDecompressor extracted {fileCount} files", 1)).MustHaveHappened();
+        A.CallTo(()=> logger.Information("DecompressionWorkflow extracted {fileCount} files", 1)).MustHaveHappened();
     }
 
     [Fact]
@@ -107,7 +107,7 @@ public class OperationSelectorTests
         A.CallTo(() => folderCompressor.CompressFolder(directoryPath, null))
             .Returns(outputPath);
         
-        var selector = new OperationSelector(fileDecompressor, folderCompressor, imageOrganizer, logger);
+        var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         await selector.ExecuteOperationAsync(OperationType.FolderCompressor, directoryPath);
 
@@ -124,7 +124,7 @@ public class OperationSelectorTests
         A.CallTo(() => imageOrganizer.OrganizeImagesAsync(directoryPath))
             .Returns(copiedCount);
         
-        var selector = new OperationSelector(fileDecompressor, folderCompressor, imageOrganizer, logger);
+        var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         await selector.ExecuteOperationAsync(OperationType.ImageOrganizer, directoryPath);
         

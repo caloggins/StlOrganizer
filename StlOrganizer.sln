@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Gui", "StlOrganizer.Gui\StlOrganizer.Gui.csproj", "{C5699AD4-FE95-43B3-9652-2B6AA7797E29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Gui", "src\StlOrganizer.Gui\StlOrganizer.Gui.csproj", "{C5699AD4-FE95-43B3-9652-2B6AA7797E29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Library", "StlOrganizer.Library\StlOrganizer.Library.csproj", "{49B1522C-0D2B-44F1-9076-1A78822B44A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Library", "src\StlOrganizer.Library\StlOrganizer.Library.csproj", "{49B1522C-0D2B-44F1-9076-1A78822B44A5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7EAA0445-738A-4863-AADE-761F9948E249}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7AB44B7F-914F-4CBF-B34A-64DF45EC4D49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Library.Tests", "StlOrganizer.Library.Tests\StlOrganizer.Library.Tests.csproj", "{96B0C334-D81E-4747-B44A-0628958F6FBB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Library.Tests", "tests\StlOrganizer.Library.Tests\StlOrganizer.Library.Tests.csproj", "{96B0C334-D81E-4747-B44A-0628958F6FBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Gui.Tests", "StlOrganizer.Gui.Tests\StlOrganizer.Gui.Tests.csproj", "{EC47FB26-BA28-4F06-8E0E-DF67BBB57CC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StlOrganizer.Gui.Tests", "tests\StlOrganizer.Gui.Tests\StlOrganizer.Gui.Tests.csproj", "{EC47FB26-BA28-4F06-8E0E-DF67BBB57CC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

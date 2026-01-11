@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net10.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\StlOrganizer.Library\StlOrganizer.Library.csproj" />
+      <ProjectReference Include="..\..\src\StlOrganizer.Gui\StlOrganizer.Gui.csproj" />
     </ItemGroup>
 
 </Project>
