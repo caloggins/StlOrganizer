@@ -14,7 +14,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
         ".zip", ".gz", ".7z", ".rar", ".tar", ".tar.gz", ".tgz"
     ];
 
-    public async Task<IEnumerable<string>> ScanAndDecompressAsync(string directoryPath)
+    public async Task<DecompressionResult> ScanAndDecompressAsync(string directoryPath)
     {
         if (!fileSystem.DirectoryExists(directoryPath))
         {
@@ -22,6 +22,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
         }
 
         var decompressedFiles = new List<string>();
+        var compressedFilesList = new List<string>();
         var compressedFiles = fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories)
             .Where(file => CompressedExtensions.Any(ext =>
                 file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)));
@@ -32,6 +33,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
             {
                 var extractedFiles = await DecompressFileAsync(compressedFile);
                 decompressedFiles.AddRange(extractedFiles);
+                compressedFilesList.Add(compressedFile);
             }
             catch (Exception ex)
             {
@@ -39,7 +41,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
             }
         }
 
-        return decompressedFiles;
+        return new DecompressionResult(decompressedFiles, compressedFilesList);
     }
 
     private async Task<List<string>> DecompressFileAsync(string filePath)

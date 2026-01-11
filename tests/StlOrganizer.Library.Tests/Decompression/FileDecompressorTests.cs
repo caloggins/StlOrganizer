@@ -42,7 +42,7 @@ public class FileDecompressorTests
     }
 
     [Fact]
-    public async Task ScanAndDecompressAsync_WhenNoCompressedFiles_ReturnsEmptyList()
+    public async Task ScanAndDecompressAsync_WhenNoCompressedFiles_ReturnsEmptyLists()
     {
         const string directoryPath = "C:\\TestDir";
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
@@ -50,7 +50,29 @@ public class FileDecompressorTests
             .Returns(["file1.txt", "file2.doc"]);
         var result = await decompressor.ScanAndDecompressAsync(directoryPath);
 
-        result.ShouldBeEmpty();
+        result.ExtractedFiles.ShouldBeEmpty();
+        result.CompressedFiles.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task ScanAndDecompressAsync_WhenDecompressionFails_DoesNotIncludeInCompressedFilesList()
+    {
+        const string directoryPath = "C:\\TestDir";
+        const string zipFile = "C:\\TestDir\\archive.zip";
+
+        A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
+        A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
+            .Returns([zipFile]);
+        A.CallTo(() => fileSystem.GetDirectoryName(zipFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFileNameWithoutExtension(zipFile)).Returns("archive");
+        A.CallTo(() => fileSystem.GetExtension(zipFile)).Returns(".zip");
+        // Decompression will fail because zip file operations aren't mocked
+
+        var result = await decompressor.ScanAndDecompressAsync(directoryPath);
+
+        // Failed decompressions are not included in compressed files list
+        result.CompressedFiles.ShouldBeEmpty();
+        result.ExtractedFiles.ShouldBeEmpty();
     }
 
     [Fact]
