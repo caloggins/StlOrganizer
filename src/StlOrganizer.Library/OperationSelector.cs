@@ -24,7 +24,7 @@ public class OperationSelector(
 
     private async Task<string> ExecuteFileDecompressorAsync(string directoryPath)
     {
-        var extractedFiles = await decompressionWorkflow.ExecuteAsync(directoryPath);
+        var extractedFiles = await decompressionWorkflow.ExecuteAsync(directoryPath, deleteOriginalFiles: false);
         var fileCount = extractedFiles.Count();
         logger.Information("DecompressionWorkflow extracted {fileCount} files", fileCount);
         return $"Successfully extracted {fileCount} file(s) and flattened folders.";

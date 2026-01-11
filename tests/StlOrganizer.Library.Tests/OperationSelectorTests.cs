@@ -20,7 +20,7 @@ public class OperationSelectorTests
         var logger = A.Fake<ILogger>();
         var extractedFiles = new List<string> { "file1.txt", "file2.txt", "file3.txt" };
 
-        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath))
+        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath, A<bool>._))
             .Returns(Task.FromResult<IEnumerable<string>>(extractedFiles));
 
         var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
@@ -28,7 +28,7 @@ public class OperationSelectorTests
         var result = await selector.ExecuteOperationAsync(OperationType.FileDecompressor, directoryPath);
 
         result.ShouldBe("Successfully extracted 3 file(s) and flattened folders.");
-        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath, A<bool>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -86,10 +86,10 @@ public class OperationSelectorTests
         const string directoryPath = @"C:\test";
         var logger = A.Fake<ILogger>();
         var extractedFiles = new List<string> { "file1.txt" };
-        
-        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath))
+
+        A.CallTo(() => decompressionWorkflow.ExecuteAsync(directoryPath, A<bool>._))
             .Returns(Task.FromResult<IEnumerable<string>>(extractedFiles));
-        
+
         var selector = new OperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         await selector.ExecuteOperationAsync(OperationType.FileDecompressor, directoryPath);
