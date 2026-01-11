@@ -41,7 +41,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns(folderPath);
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("TestDir");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "TestDir.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -62,7 +62,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(expectedOutput);
         A.CallTo(() => fileOperations.FileExists(expectedOutput)).Returns(false);
@@ -83,7 +83,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(expectedOutput);
         A.CallTo(() => fileOperations.FileExists(expectedOutput)).Returns(false);
@@ -124,7 +124,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(true);
@@ -145,7 +145,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -168,7 +168,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -197,14 +197,14 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
         A.CallTo(() => zipArchiveFactory.Open(outputPath, ZipArchiveMode.Create)).Returns(archive);
         A.CallTo(() => fileSystem.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)).Returns([]);
         A.CallTo(() => fileSystem.GetDirectories(folderPath)).Returns([subDir]);
-        A.CallTo(() => fileSystem.GetDirectoryName(subDir)).Returns("SubDir");
+        A.CallTo(() => fileSystem.GetFolderName(subDir)).Returns("SubDir");
         A.CallTo(() => fileSystem.GetFiles(subDir, "*.*", SearchOption.TopDirectoryOnly)).Returns([file]);
         A.CallTo(() => fileOperations.GetFileName(file)).Returns("file.txt");
         A.CallTo(() => fileSystem.CombinePaths("SubDir", "file.txt")).Returns(@"SubDir\file.txt");
@@ -227,7 +227,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("Root");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("Root");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "Root.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -236,13 +236,13 @@ public class FolderCompressorTests
         // Root level - entryPrefix is empty string at start
         A.CallTo(() => fileSystem.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)).Returns([]);
         A.CallTo(() => fileSystem.GetDirectories(folderPath)).Returns([subDir]);
-        A.CallTo(() => fileSystem.GetDirectoryName(subDir)).Returns("Folder");
+        A.CallTo(() => fileSystem.GetFolderName(subDir)).Returns("Folder");
         // newEntryPrefix becomes "Folder" (no CombinePaths call since entryPrefix is empty)
 
         // Folder level - entryPrefix is now "Folder"
         A.CallTo(() => fileSystem.GetFiles(subDir, "*.*", SearchOption.TopDirectoryOnly)).Returns([]);
         A.CallTo(() => fileSystem.GetDirectories(subDir)).Returns([nestedDir]);
-        A.CallTo(() => fileSystem.GetDirectoryName(nestedDir)).Returns("Nested");
+        A.CallTo(() => fileSystem.GetFolderName(nestedDir)).Returns("Nested");
         A.CallTo(() => fileSystem.CombinePaths("Folder", "Nested")).Returns(@"Folder\Nested");
         // newEntryPrefix becomes "Folder\Nested" then .Replace('\\', '/') = "Folder/Nested"
 
@@ -270,7 +270,7 @@ public class FolderCompressorTests
         var exception = new IOException("File locked");
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -299,7 +299,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -324,7 +324,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -346,7 +346,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -371,7 +371,7 @@ public class FolderCompressorTests
         var archive = A.Fake<IZipArchive>();
 
         A.CallTo(() => fileSystem.DirectoryExists(folderPath)).Returns(true);
-        A.CallTo(() => fileSystem.GetDirectoryName(folderPath)).Returns("MyFolder");
+        A.CallTo(() => fileSystem.GetFolderName(folderPath)).Returns("MyFolder");
         A.CallTo(() => fileSystem.GetParentDirectory(folderPath)).Returns(@"C:\");
         A.CallTo(() => fileSystem.CombinePaths(@"C:\", "MyFolder.zip")).Returns(outputPath);
         A.CallTo(() => fileOperations.FileExists(outputPath)).Returns(false);
@@ -380,13 +380,13 @@ public class FolderCompressorTests
         // Root - entryPrefix starts as empty
         A.CallTo(() => fileSystem.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)).Returns([]);
         A.CallTo(() => fileSystem.GetDirectories(folderPath)).Returns([@"C:\MyFolder\Sub"]);
-        A.CallTo(() => fileSystem.GetDirectoryName(@"C:\MyFolder\Sub")).Returns("Sub");
+        A.CallTo(() => fileSystem.GetFolderName(@"C:\MyFolder\Sub")).Returns("Sub");
         // newEntryPrefix becomes "Sub"
 
         // Sub - entryPrefix is "Sub"
         A.CallTo(() => fileSystem.GetFiles(@"C:\MyFolder\Sub", "*.*", SearchOption.TopDirectoryOnly)).Returns([]);
         A.CallTo(() => fileSystem.GetDirectories(@"C:\MyFolder\Sub")).Returns([subDir]);
-        A.CallTo(() => fileSystem.GetDirectoryName(subDir)).Returns("Dir");
+        A.CallTo(() => fileSystem.GetFolderName(subDir)).Returns("Dir");
         A.CallTo(() => fileSystem.CombinePaths("Sub", "Dir")).Returns(@"Sub\Dir");
         // newEntryPrefix becomes "Sub\Dir".Replace('\\', '/') = "Sub/Dir"
 
