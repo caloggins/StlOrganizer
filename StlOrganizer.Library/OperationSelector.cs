@@ -9,7 +9,7 @@ public class OperationSelector(
     IFileDecompressor fileDecompressor,
     IFolderCompressor folderCompressor,
     IImageOrganizer imageOrganizer,
-    ILogger logger)
+    ILogger logger) : IOperationSelector
 {
     public async Task<string> ExecuteOperationAsync(OperationType operationType, string directoryPath)
     {
