@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using StlOrganizer.Library;
 
 namespace StlOrganizer.Gui.ViewModels;
@@ -9,39 +10,38 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly IOperationSelector operationSelector;
 
+    [ObservableProperty] private bool isBusy;
+
+    [ObservableProperty] private int progress;
+
+    [ObservableProperty] private string selectedDirectory = string.Empty;
+
+    [ObservableProperty] private FileOperation selectedOperation;
+
+    [ObservableProperty] private string statusMessage = string.Empty;
+
+    [ObservableProperty] private string textFieldValue = string.Empty;
+
+    [ObservableProperty] private string title = "Stl Organizer";
+
+    public MainViewModel() : this(null!)
+    {
+    }
+
     public MainViewModel(
         IOperationSelector operationSelector)
     {
         this.operationSelector = operationSelector;
         AvailableOperations =
         [
-            OperationType.FileDecompressor,
-            OperationType.FolderCompressor,
-            OperationType.ImageOrganizer
+            FileOperation.DecompressFiles,
+            FileOperation.CompressFolder,
+            FileOperation.ExtractImages
         ];
-        SelectedOperation = OperationType.FileDecompressor;
+        SelectedOperation = FileOperation.DecompressFiles;
     }
 
-    public ObservableCollection<OperationType> AvailableOperations { get; }
-
-    [ObservableProperty] private int progress;
-
-    [ObservableProperty] private string title = "Stl Organizer";
-
-    [ObservableProperty]
-    private string textFieldValue = string.Empty;
-
-    [ObservableProperty]
-    private string selectedDirectory = string.Empty;
-
-    [ObservableProperty]
-    private OperationType selectedOperation;
-
-    [ObservableProperty]
-    private bool isBusy;
-
-    [ObservableProperty]
-    private string statusMessage = string.Empty;
+    public ObservableCollection<FileOperation> AvailableOperations { get; }
 
     [RelayCommand]
     private void ChangeTitle()

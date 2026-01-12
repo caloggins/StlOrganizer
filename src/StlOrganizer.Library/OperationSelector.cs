@@ -11,22 +11,22 @@ public class OperationSelector(
     IImageOrganizer imageOrganizer,
     ILogger logger) : IOperationSelector
 {
-    public async Task<string> ExecuteOperationAsync(OperationType operationType,
+    public async Task<string> ExecuteOperationAsync(FileOperation operationType,
         string directoryPath,
         CancellationToken ct)
     {
         return operationType switch
         {
-            OperationType.FileDecompressor => await ExecuteFileDecompressorAsync(directoryPath),
-            OperationType.FolderCompressor => await ExecuteFolderCompressorAsync(directoryPath),
-            OperationType.ImageOrganizer => await ExecuteImageOrganizerAsync(directoryPath),
-            _ => throw new ArgumentException($"Unknown operation type: {operationType}")
+            _ when operationType == FileOperation.DecompressFiles => await ExecuteFileDecompressorAsync(directoryPath),
+            _ when operationType == FileOperation.CompressFolder => await ExecuteFolderCompressorAsync(directoryPath),
+            _ when operationType == FileOperation.ExtractImages => await ExecuteImageOrganizerAsync(directoryPath),
+            _ => throw new ArgumentException($"Unknown operation type: {operationType.Name}")
         };
     }
 
     private async Task<string> ExecuteFileDecompressorAsync(string directoryPath)
     {
-        var extractedFiles = await decompressionWorkflow.ExecuteAsync(directoryPath, deleteOriginalFiles: false);
+        var extractedFiles = await decompressionWorkflow.ExecuteAsync(directoryPath, false);
         var fileCount = extractedFiles.Count();
         logger.Information("DecompressionWorkflow extracted {fileCount} files", fileCount);
         return $"Successfully extracted {fileCount} file(s) and flattened folders.";
