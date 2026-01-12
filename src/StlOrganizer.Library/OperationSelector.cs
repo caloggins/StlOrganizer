@@ -11,7 +11,9 @@ public class OperationSelector(
     IImageOrganizer imageOrganizer,
     ILogger logger) : IOperationSelector
 {
-    public async Task<string> ExecuteOperationAsync(OperationType operationType, string directoryPath)
+    public async Task<string> ExecuteOperationAsync(OperationType operationType,
+        string directoryPath,
+        CancellationToken ct)
     {
         return operationType switch
         {

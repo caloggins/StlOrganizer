@@ -2,5 +2,5 @@
 
 public interface IOperationSelector
 {
-    Task<string> ExecuteOperationAsync(OperationType operationType, string directoryPath);
+    Task<string> ExecuteOperationAsync(OperationType operationType, string directoryPath, CancellationToken ct);
 }
