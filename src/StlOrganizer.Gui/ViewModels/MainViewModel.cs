@@ -23,8 +23,9 @@ public partial class MainViewModel : ObservableObject
 
     public ObservableCollection<OperationType> AvailableOperations { get; }
 
-    [ObservableProperty]
-    private string title = "Stl Organizer";
+    [ObservableProperty] private int progress;
+
+    [ObservableProperty] private string title = "Stl Organizer";
 
     [ObservableProperty]
     private string textFieldValue = string.Empty;
@@ -36,7 +37,7 @@ public partial class MainViewModel : ObservableObject
     private OperationType selectedOperation;
 
     [ObservableProperty]
-    private bool isExecuting;
+    private bool isBusy;
 
     [ObservableProperty]
     private string statusMessage = string.Empty;
@@ -66,12 +67,13 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
+        var tokenSource = new CancellationTokenSource();
         try
         {
-            IsExecuting = true;
+            IsBusy = true;
             StatusMessage = $"Executing {SelectedOperation}...";
 
-            var result = await operationSelector.ExecuteOperationAsync(SelectedOperation, SelectedDirectory);
+            var result = await operationSelector.ExecuteOperationAsync(SelectedOperation, SelectedDirectory, tokenSource.Token);
             StatusMessage = result;
         }
         catch (Exception ex)
@@ -80,7 +82,9 @@ public partial class MainViewModel : ObservableObject
         }
         finally
         {
-            IsExecuting = false;
+            IsBusy = false;
+            tokenSource.Dispose();
         }
+
     }
 }
