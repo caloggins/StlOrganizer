@@ -9,7 +9,8 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly IOperationSelector operationSelector;
 
-    public MainViewModel(IOperationSelector operationSelector)
+    public MainViewModel(
+        IOperationSelector operationSelector)
     {
         this.operationSelector = operationSelector;
         AvailableOperations =
@@ -52,10 +53,8 @@ public partial class MainViewModel : ObservableObject
     private void SelectDirectory()
     {
         var dialog = new Microsoft.Win32.OpenFolderDialog();
-        if (dialog.ShowDialog() == true)
-        {
-            SelectedDirectory = dialog.FolderName;
-        }
+        
+        if (dialog.ShowDialog() == true) SelectedDirectory = dialog.FolderName;
     }
 
     [RelayCommand]
