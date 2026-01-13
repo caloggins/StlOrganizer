@@ -10,6 +10,7 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly ICancellationTokenSourceProvider cancellationTokenSourceProvider;
     private readonly IOperationSelector operationSelector;
+    private CancellationTokenSource? cancellationToken;
 
     [ObservableProperty] private bool isBusy;
 
@@ -61,6 +62,12 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void Cancel()
+    {
+        cancellationToken?.Cancel();
+    }
+
+    [RelayCommand]
     private async Task ExecuteOperationAsync()
     {
         if (string.IsNullOrWhiteSpace(SelectedDirectory))
@@ -69,7 +76,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        using var tokenSource = cancellationTokenSourceProvider.Create();
+        cancellationToken = cancellationTokenSourceProvider.Create();
 
         try
         {
@@ -77,8 +84,12 @@ public partial class MainViewModel : ObservableObject
             StatusMessage = $"Executing {SelectedOperation}...";
 
             var result =
-                await operationSelector.ExecuteOperationAsync(SelectedOperation, SelectedDirectory, tokenSource.Token);
+                await operationSelector.ExecuteOperationAsync(SelectedOperation, SelectedDirectory, cancellationToken.Token);
             StatusMessage = result;
+        }
+        catch (OperationCanceledException)
+        {
+            StatusMessage = "Operation canceled.";
         }
         catch (Exception ex)
         {
@@ -87,6 +98,10 @@ public partial class MainViewModel : ObservableObject
         finally
         {
             IsBusy = false;
+            cancellationToken.Dispose();
+            cancellationToken = null;
         }
     }
+    
+    
 }
