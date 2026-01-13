@@ -17,7 +17,9 @@ public partial class MainViewModel : ObservableValidator
 
     [ObservableProperty] private int progress;
 
-    [ObservableProperty] private string selectedDirectory = string.Empty;
+    [ObservableProperty]
+    [Required(ErrorMessage = "Directory is required.")]
+    private string selectedDirectory = string.Empty;
 
     [ObservableProperty] private FileOperation selectedOperation;
 
