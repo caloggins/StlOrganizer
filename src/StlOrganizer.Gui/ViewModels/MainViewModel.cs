@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -6,7 +7,7 @@ using StlOrganizer.Library;
 
 namespace StlOrganizer.Gui.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableValidator
 {
     private readonly ICancellationTokenSourceProvider cancellationTokenSourceProvider;
     private readonly IOperationSelector operationSelector;
