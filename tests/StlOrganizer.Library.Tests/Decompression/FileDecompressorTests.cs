@@ -22,7 +22,7 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WhenDirectoryDoesNotExist_ThrowsDirectoryNotFoundException()
     {
-        const string directoryPath = "C:\\NonExistent";
+        const string directoryPath = @"C:\NonExistent";
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(false);
 
         await Should.ThrowAsync<DirectoryNotFoundException>(
@@ -32,7 +32,7 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WhenDirectoryExists_ChecksDirectoryExists()
     {
-        const string directoryPath = "C:\\TestDir";
+        const string directoryPath = @"C:\TestDir";
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns(Array.Empty<string>());
@@ -44,7 +44,7 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WhenNoCompressedFiles_ReturnsEmptyLists()
     {
-        const string directoryPath = "C:\\TestDir";
+        const string directoryPath = @"C:\TestDir";
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns(["file1.txt", "file2.doc"]);
@@ -57,13 +57,13 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WhenDecompressionFails_DoesNotIncludeInCompressedFilesList()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string zipFile = "C:\\TestDir\\archive.zip";
+        const string directoryPath = @"C:\TestDir";
+        const string zipFile = @"C:\TestDir\archive.zip";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([zipFile]);
-        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(zipFile)).Returns("archive");
         A.CallTo(() => fileSystem.GetExtension(zipFile)).Returns(".zip");
         // Decompression will fail because zip file operations aren't mocked
@@ -78,7 +78,7 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WhenZipFileExists_ScansRecursively()
     {
-        const string directoryPath = "C:\\TestDir";
+        const string directoryPath = @"C:\TestDir";
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns(["C:\\TestDir\\archive.zip"]);
@@ -91,13 +91,13 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WithZipFile_FindsZipExtension()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string zipFile = "C:\\TestDir\\archive.zip";
+        const string directoryPath = @"C:\TestDir";
+        const string zipFile = @"C:\TestDir\archive.zip";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([zipFile, "other.txt"]);
-        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(zipFile)).Returns("archive");
         A.CallTo(() => fileSystem.GetExtension(zipFile)).Returns(".zip");
         await decompressor.ScanAndDecompressAsync(directoryPath);
@@ -108,13 +108,13 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WithGzipFile_FindsGzExtension()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string gzipFile = "C:\\TestDir\\file.gz";
+        const string directoryPath = @"C:\TestDir";
+        const string gzipFile = @"C:\TestDir\file.gz";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([gzipFile]);
-        A.CallTo(() => fileSystem.GetFolderName(gzipFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(gzipFile)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(gzipFile)).Returns("file");
         A.CallTo(() => fileSystem.GetExtension(gzipFile)).Returns(".gz");
         await decompressor.ScanAndDecompressAsync(directoryPath);
@@ -125,13 +125,13 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WithTarFile_FindsTarExtension()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string tarFile = "C:\\TestDir\\archive.tar";
+        const string directoryPath = @"C:\TestDir";
+        const string tarFile = @"C:\TestDir\archive.tar";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([tarFile]);
-        A.CallTo(() => fileSystem.GetFolderName(tarFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(tarFile)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(tarFile)).Returns("archive");
         A.CallTo(() => fileSystem.GetExtension(tarFile)).Returns(".tar");
         await decompressor.ScanAndDecompressAsync(directoryPath);
@@ -142,13 +142,13 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WithTarGzFile_FindsTarGzExtension()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string tarGzFile = "C:\\TestDir\\archive.tar.gz";
+        const string directoryPath = @"C:\TestDir";
+        const string tarGzFile = @"C:\TestDir\archive.tar.gz";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([tarGzFile]);
-        A.CallTo(() => fileSystem.GetFolderName(tarGzFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(tarGzFile)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(tarGzFile)).Returns("archive.tar");
         A.CallTo(() => fileSystem.GetExtension(tarGzFile)).Returns(".gz");
         await decompressor.ScanAndDecompressAsync(directoryPath);
@@ -159,14 +159,14 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_WithMultipleCompressedFiles_ProcessesAll()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string zipFile = "C:\\TestDir\\archive.zip";
-        const string gzFile = "C:\\TestDir\\file.gz";
+        const string directoryPath = @"C:\TestDir";
+        const string zipFile = @"C:\TestDir\archive.zip";
+        const string gzFile = @"C:\TestDir\file.gz";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([zipFile, gzFile]);
-        A.CallTo(() => fileSystem.GetFolderName(A<string>._)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(A<string>._)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(zipFile)).Returns("archive");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(gzFile)).Returns("file");
         A.CallTo(() => fileSystem.GetExtension(zipFile)).Returns(".zip");
@@ -180,31 +180,32 @@ public class FileDecompressorTests
     [Fact]
     public async Task ScanAndDecompressAsync_CreatesOutputDirectory()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string zipFile = "C:\\TestDir\\archive.zip";
+        const string directoryPath = @"C:\TestDir";
+        const string zipFile = @"C:\TestDir\archive.zip";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([zipFile]);
-        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(zipFile)).Returns("archive");
         A.CallTo(() => fileSystem.GetExtension(zipFile)).Returns(".zip");
+        
         await decompressor.ScanAndDecompressAsync(directoryPath);
 
-        A.CallTo(() => fileSystem.CreateDirectory("C:\\TestDir\\archive"))
+        A.CallTo(() => fileSystem.CreateDirectory(@"C:\TestDir\archive"))
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task ScanAndDecompressAsync_IsCaseInsensitive()
     {
-        const string directoryPath = "C:\\TestDir";
-        const string zipFile = "C:\\TestDir\\ARCHIVE.ZIP";
+        const string directoryPath = @"C:\TestDir";
+        const string zipFile = @"C:\TestDir\ARCHIVE.ZIP";
 
         A.CallTo(() => fileSystem.DirectoryExists(directoryPath)).Returns(true);
         A.CallTo(() => fileSystem.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
             .Returns([zipFile]);
-        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns("C:\\TestDir");
+        A.CallTo(() => fileSystem.GetFolderName(zipFile)).Returns(@"C:\TestDir");
         A.CallTo(() => fileSystem.GetFileNameWithoutExtension(zipFile)).Returns("ARCHIVE");
         A.CallTo(() => fileSystem.GetExtension(zipFile)).Returns(".ZIP");
         await decompressor.ScanAndDecompressAsync(directoryPath);

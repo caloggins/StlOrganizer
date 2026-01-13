@@ -7,14 +7,18 @@ using ZipFile = ICSharpCode.SharpZipLib.Zip.ZipFile;
 
 namespace StlOrganizer.Library.Decompression;
 
-public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDecompressor
+public class FileDecompressor(
+    IFileSystem fileSystem,
+    ILogger logger) : IFileDecompressor
 {
     private static readonly string[] CompressedExtensions =
     [
         ".zip", ".gz", ".7z", ".rar", ".tar", ".tar.gz", ".tgz"
     ];
 
-    public async Task<DecompressionResult> ScanAndDecompressAsync(string directoryPath, CancellationToken cancellationToken = default)
+    public async Task<DecompressionResult> ScanAndDecompressAsync(
+        string directoryPath,
+        CancellationToken cancellationToken = default)
     {
         if (!fileSystem.DirectoryExists(directoryPath))
         {
@@ -49,7 +53,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
     {
         var extractedFiles = new List<string>();
         var outputDirectory = Path.Combine(
-            fileSystem.GetFolderName(filePath),
+            fileSystem.GetParentDirectory(filePath)!,
             fileSystem.GetFileNameWithoutExtension(filePath));
 
         fileSystem.CreateDirectory(outputDirectory);
@@ -114,7 +118,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
         using var inputStream = fileSystem.OpenRead(gzipPath);
         using var gzipStream = new GZipInputStream(inputStream);
         using var outputStream = fileSystem.CreateFile(outputFileName);
-        
+
         cancellationToken.ThrowIfCancellationRequested();
         gzipStream.CopyTo(outputStream);
 
@@ -127,7 +131,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
 
         using var inputStream = fileSystem.OpenRead(tarPath);
         using var tarArchive = TarArchive.CreateInputTarArchive(inputStream, null);
-        
+
         cancellationToken.ThrowIfCancellationRequested();
         tarArchive.ExtractContents(outputDirectory);
 
@@ -144,7 +148,7 @@ public class FileDecompressor(IFileSystem fileSystem, ILogger logger) : IFileDec
         using var inputStream = fileSystem.OpenRead(tarGzPath);
         using var gzipStream = new GZipInputStream(inputStream);
         using var tarArchive = TarArchive.CreateInputTarArchive(gzipStream, null);
-        
+
         cancellationToken.ThrowIfCancellationRequested();
         tarArchive.ExtractContents(outputDirectory);
 
