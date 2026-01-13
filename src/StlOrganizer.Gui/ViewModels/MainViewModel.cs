@@ -8,6 +8,7 @@ namespace StlOrganizer.Gui.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
+    private readonly ICancellationTokenSourceProvider cancellationTokenSourceProvider;
     private readonly IOperationSelector operationSelector;
 
     [ObservableProperty] private bool isBusy;
@@ -24,14 +25,16 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty] private string title = "Stl Organizer";
 
-    public MainViewModel() : this(null!)
+    public MainViewModel() : this(null!, null!)
     {
     }
 
     public MainViewModel(
-        IOperationSelector operationSelector)
+        IOperationSelector operationSelector,
+        ICancellationTokenSourceProvider cancellationTokenSourceProvider)
     {
         this.operationSelector = operationSelector;
+        this.cancellationTokenSourceProvider = cancellationTokenSourceProvider;
         AvailableOperations =
         [
             FileOperation.DecompressFiles,
@@ -66,7 +69,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        using var tokenSource = new CancellationTokenSource();
+        using var tokenSource = cancellationTokenSourceProvider.Create();
 
         try
         {

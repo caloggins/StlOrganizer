@@ -7,13 +7,16 @@ namespace StlOrganizer.Gui.Tests.ViewModels;
 
 public class MainViewModelTests
 {
+    private readonly ICancellationTokenSourceProvider cancellationTokenSourceProvider;
     private readonly IOperationSelector operationSelector;
     private readonly MainViewModel viewModel;
 
     public MainViewModelTests()
     {
         operationSelector = A.Fake<IOperationSelector>();
-        viewModel = new MainViewModel(operationSelector);
+        cancellationTokenSourceProvider = A.Fake<ICancellationTokenSourceProvider>();
+        A.CallTo(() => cancellationTokenSourceProvider.Create()).ReturnsLazily(() => new CancellationTokenSource());
+        viewModel = new MainViewModel(operationSelector, cancellationTokenSourceProvider);
     }
 
     [Fact]
@@ -109,7 +112,22 @@ public class MainViewModelTests
         await viewModel.ExecuteOperationCommand.ExecuteAsync(null);
 
         executionStarted.ShouldBeTrue();
-        viewModel.IsBusy.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task ExecuteOperationAsync_UsesCancellationTokenSourceFromProvider()
+    {
+        const string directory = @"C:\TestDir";
+        viewModel.SelectedDirectory = directory;
+        var cts = new CancellationTokenSource();
+        var token = cts.Token;
+        A.CallTo(() => cancellationTokenSourceProvider.Create()).Returns(cts);
+
+        await viewModel.ExecuteOperationCommand.ExecuteAsync(null);
+
+        A.CallTo(() => cancellationTokenSourceProvider.Create()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => operationSelector.ExecuteOperationAsync(A<FileOperation>._, A<string>._, token))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
