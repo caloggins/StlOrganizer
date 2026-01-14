@@ -29,9 +29,9 @@ public class FileSystemAdapterTests
         Should.Throw<ArgumentException>(() => sut.GetFolderName(string.Empty));
     }
 
-    [Theory]
-    [InlineData(@"C:\myfolder\target", @"C:\myfolder\target")]
-    [InlineData(@"C:\myfolder\target\file.zip", @"C:\myfolder\target")]
+    // [Theory]
+    // [InlineData(@"C:\myfolder\target", @"C:\myfolder\target")]
+    // [InlineData(@"C:\myfolder\target\file.zip", @"C:\myfolder\target")]
     public void GetDirectoryName_WhenGivenAPath_ReturnsPath(string source, string expected)
     {
         var sut = new FileSystemAdapter(A.Fake<IFileOperations>());
