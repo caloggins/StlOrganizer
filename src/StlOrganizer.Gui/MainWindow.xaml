@@ -11,15 +11,16 @@
         Title="STL Organizer" Height="350" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="70*" />
+            <ColumnDefinition Width="30*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="10">
@@ -45,24 +46,7 @@
                 MinWidth="200" />
         </StackPanel>
 
-        <Button Grid.Row="3"
-                Grid.Column="1"
-                Content="Run Operation"
-                Command="{Binding ExecuteOperationCommand}"
-                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
-                Margin="10"
-                Padding="10,5"
-                HorizontalAlignment="Left" />
-
-        <Button Grid.Row="3"
-                Grid.Column="0"
-                Content="Cancel"
-                Command="{Binding CancelCommand}"
-                IsEnabled="{Binding IsBusy}"
-                Margin="10"
-                Padding="10,5" />
-
-        <ProgressBar Grid.Row="4"
+        <ProgressBar Grid.Row="3"
                      Grid.Column="0"
                      Grid.ColumnSpan="2"
                      Margin="10"
@@ -70,13 +54,32 @@
                      Maximum="100"
                      Value="{Binding Progress}"
                      Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-
+        
         <TextBlock Grid.Row="4"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
                    Text="{Binding StatusMessage}"
                    Margin="10"
                    FontWeight="Bold" />
+
+        <Button Grid.Row="5"
+                Grid.Column="1"
+                Content="{Binding SelectedOperation.Name}"
+                Command="{Binding ExecuteOperationCommand}"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                Margin="10"
+                Padding="10,5"
+                HorizontalAlignment="Right" />
+
+        <Button Grid.Row="5"
+                Grid.Column="0"
+                Content="Cancel"
+                Command="{Binding CancelCommand}"
+                IsEnabled="{Binding IsBusy}"
+                Margin="10"
+                Padding="10,5" />
+
+
+        
     </Grid>
 </Window>

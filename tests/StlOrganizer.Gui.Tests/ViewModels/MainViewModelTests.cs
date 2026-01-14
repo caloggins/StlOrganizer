@@ -2,6 +2,7 @@
 using Shouldly;
 using StlOrganizer.Gui.ViewModels;
 using StlOrganizer.Library;
+using StlOrganizer.Library.SystemAdapters;
 
 namespace StlOrganizer.Gui.Tests.ViewModels;
 

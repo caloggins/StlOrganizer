@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using StlOrganizer.Library;
+using StlOrganizer.Library.SystemAdapters;
 
 namespace StlOrganizer.Gui.ViewModels;
 

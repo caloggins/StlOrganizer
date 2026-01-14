@@ -1,4 +1,4 @@
-﻿namespace StlOrganizer.Library;
+﻿namespace StlOrganizer.Library.SystemAdapters;
 
 public interface ICancellationTokenSourceProvider
 {

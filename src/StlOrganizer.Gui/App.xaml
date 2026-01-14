@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemeResources RequestedTheme="Light" AccentColor="Red" />
+                <ui:ThemeResources RequestedTheme="Light" AccentColor="MediumVioletRed" />
                 <ui:XamlControlsResources />
                 <ui:IntellisenseResources Source="/ModernWpf;component/DesignTime/DesignTimeResources.xaml" />
             </ResourceDictionary.MergedDictionaries>

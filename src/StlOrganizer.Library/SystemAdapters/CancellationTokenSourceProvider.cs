@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace StlOrganizer.Library;
+﻿namespace StlOrganizer.Library.SystemAdapters;
 
 public class CancellationTokenSourceProvider : ICancellationTokenSourceProvider
 {
