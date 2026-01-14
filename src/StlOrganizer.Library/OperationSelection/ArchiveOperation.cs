@@ -1,4 +1,6 @@
-﻿namespace StlOrganizer.Library.OperationSelection;
+﻿using StlOrganizer.Library.SystemAdapters;
+
+namespace StlOrganizer.Library.OperationSelection;
 
 public sealed class ArchiveOperation : SmartEnum<ArchiveOperation>
 {

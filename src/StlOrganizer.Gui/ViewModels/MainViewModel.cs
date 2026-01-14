@@ -116,6 +116,7 @@ public partial class MainViewModel : ObservableValidator
             var result = await archiveOperationSelector.ExecuteOperationAsync(
                     SelectedOperation,
                     SelectedDirectory,
+                    new Progress<OrganizerProgress>(),
                     cancellationToken.Token);
             StatusMessage = result;
         }

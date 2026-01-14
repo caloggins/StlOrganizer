@@ -27,7 +27,11 @@ public class ArchiveOperationSelectorTests
         var selector = new ArchiveOperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         var result =
-            await selector.ExecuteOperationAsync(ArchiveOperation.CompressFolder, directoryPath, CancellationToken.None);
+            await selector.ExecuteOperationAsync(
+                ArchiveOperation.CompressFolder, 
+                directoryPath, 
+                new Progress<OrganizerProgress>(),
+                CancellationToken.None);
 
         result.ShouldBe($"Successfully created archive: {outputPath}");
         A.CallTo(() => folderCompressor.CompressFolder(directoryPath, null)).MustHaveHappenedOnceExactly();
@@ -47,7 +51,11 @@ public class ArchiveOperationSelectorTests
         var selector = new ArchiveOperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
         var result =
-            await selector.ExecuteOperationAsync(ArchiveOperation.ExtractImages, directoryPath, CancellationToken.None);
+            await selector.ExecuteOperationAsync(
+                ArchiveOperation.ExtractImages,
+                directoryPath,
+                new Progress<OrganizerProgress>(), 
+                CancellationToken.None);
 
         result.ShouldBe("Successfully copied 5 image(s) to Images folder.");
         A.CallTo(() => imageOrganizer.OrganizeImagesAsync(directoryPath)).MustHaveHappenedOnceExactly();
@@ -65,7 +73,11 @@ public class ArchiveOperationSelectorTests
 
         var selector = new ArchiveOperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
-        await selector.ExecuteOperationAsync(ArchiveOperation.CompressFolder, directoryPath, CancellationToken.None);
+        await selector.ExecuteOperationAsync(
+            ArchiveOperation.CompressFolder, 
+            directoryPath, 
+            new Progress<OrganizerProgress>(),
+            CancellationToken.None);
 
         A.CallTo(() => logger.Information("FolderCompressor created archive at {OutputPath}", outputPath))
             .MustHaveHappened();
@@ -83,7 +95,11 @@ public class ArchiveOperationSelectorTests
 
         var selector = new ArchiveOperationSelector(decompressionWorkflow, folderCompressor, imageOrganizer, logger);
 
-        await selector.ExecuteOperationAsync(ArchiveOperation.ExtractImages, directoryPath, CancellationToken.None);
+        await selector.ExecuteOperationAsync(
+            ArchiveOperation.ExtractImages, 
+            directoryPath, 
+            new Progress<OrganizerProgress>(), 
+            CancellationToken.None);
 
         A.CallTo(() => logger.Information("ImageOrganizer copied {CopiedCount} images", copiedCount))
             .MustHaveHappened();

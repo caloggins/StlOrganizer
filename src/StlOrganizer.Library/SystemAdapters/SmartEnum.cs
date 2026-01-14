@@ -1,4 +1,4 @@
-﻿namespace StlOrganizer.Library;
+﻿namespace StlOrganizer.Library.SystemAdapters;
 
 public abstract class SmartEnum<T>(int id, string name)
     where T : SmartEnum<T>
