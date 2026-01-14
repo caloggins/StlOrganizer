@@ -22,36 +22,36 @@ public class FolderFlattenerTests
         const string path = @"C:\NonExistent";
         A.CallTo(() => directoryService.Exists(path)).Returns(false);
 
-        Should.Throw<DirectoryNotFoundException>(() => flattener.RemoveNestedFolders(path));
+        Should.Throw<DirectoryNotFoundException>(() => flattener.RemoveNestedFolders(path, CancellationToken.None));
     }
 
     [Fact]
-    public void RemoveNestedFolders_WhenDirectoryExists_ChecksExistence()
+    public async Task RemoveNestedFolders_WhenDirectoryExists_ChecksExistence()
     {
         const string path = @"C:\TestDir";
         A.CallTo(() => directoryService.Exists(path)).Returns(true);
         A.CallTo(() => directoryService.GetDirectories(path)).Returns(Array.Empty<string>());
 
-        flattener.RemoveNestedFolders(path);
+        await flattener.RemoveNestedFolders(path, CancellationToken.None);
 
         A.CallTo(() => directoryService.Exists(path)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public void RemoveNestedFolders_WhenNoSubdirectories_DoesNothing()
+    public async Task RemoveNestedFolders_WhenNoSubdirectories_DoesNothing()
     {
         const string path = @"C:\TestDir";
         A.CallTo(() => directoryService.Exists(path)).Returns(true);
         A.CallTo(() => directoryService.GetDirectories(path)).Returns(Array.Empty<string>());
 
-        flattener.RemoveNestedFolders(path);
+        await flattener.RemoveNestedFolders(path, CancellationToken.None);
 
         A.CallTo(() => directoryService.Move(A<string>._, A<string>._)).MustNotHaveHappened();
         A.CallTo(() => directoryService.Delete(A<string>._, A<bool>._)).MustNotHaveHappened();
     }
 
     [Fact]
-    public void RemoveNestedFolders_WhenSubdirectoryNameMatches_FlattensFolder()
+    public async Task RemoveNestedFolders_WhenSubdirectoryNameMatches_FlattensFolder()
     {
         const string parentPath = @"C:\TestDir";
         const string childPath = @"C:\TestDir\TestDir";
@@ -62,14 +62,14 @@ public class FolderFlattenerTests
         A.CallTo(() => directoryService.GetDirectoryName(parentPath)).Returns("TestDir");
         A.CallTo(() => directoryService.GetDirectoryName(childPath)).Returns("TestDir");
 
-        flattener.RemoveNestedFolders(parentPath);
+        await flattener.RemoveNestedFolders(parentPath, CancellationToken.None);
 
         A.CallTo(() => directoryService.Move(childPath, parentPath)).MustHaveHappenedOnceExactly();
         A.CallTo(() => directoryService.Delete(childPath, false)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public void RemoveNestedFolders_WhenSubdirectoryNameDoesNotMatch_DoesNotFlatten()
+    public async Task RemoveNestedFolders_WhenSubdirectoryNameDoesNotMatch_DoesNotFlatten()
     {
         const string parentPath = @"C:\TestDir";
         const string childPath = @"C:\TestDir\OtherDir";
@@ -80,14 +80,14 @@ public class FolderFlattenerTests
         A.CallTo(() => directoryService.GetDirectoryName(parentPath)).Returns("TestDir");
         A.CallTo(() => directoryService.GetDirectoryName(childPath)).Returns("OtherDir");
 
-        flattener.RemoveNestedFolders(parentPath);
+        await flattener.RemoveNestedFolders(parentPath, CancellationToken.None);
 
         A.CallTo(() => directoryService.Move(A<string>._, A<string>._)).MustNotHaveHappened();
         A.CallTo(() => directoryService.Delete(A<string>._, A<bool>._)).MustNotHaveHappened();
     }
 
     [Fact]
-    public void RemoveNestedFolders_IsCaseInsensitive()
+    public async Task RemoveNestedFolders_IsCaseInsensitive()
     {
         const string parentPath = @"C:\TestDir";
         const string childPath = @"C:\TestDir\testdir";
@@ -98,14 +98,14 @@ public class FolderFlattenerTests
         A.CallTo(() => directoryService.GetDirectoryName(parentPath)).Returns("TestDir");
         A.CallTo(() => directoryService.GetDirectoryName(childPath)).Returns("testdir");
 
-        flattener.RemoveNestedFolders(parentPath);
+        await flattener.RemoveNestedFolders(parentPath, CancellationToken.None);
 
         A.CallTo(() => directoryService.Move(childPath, parentPath)).MustHaveHappenedOnceExactly();
         A.CallTo(() => directoryService.Delete(childPath, false)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public void RemoveNestedFolders_WithMultipleSubdirectories_ProcessesAll()
+    public async Task RemoveNestedFolders_WithMultipleSubdirectories_ProcessesAll()
     {
         const string parentPath = @"C:\Root";
         const string matchingChild = @"C:\Root\Root";
@@ -120,7 +120,7 @@ public class FolderFlattenerTests
         A.CallTo(() => directoryService.GetDirectoryName(matchingChild)).Returns("Root");
         A.CallTo(() => directoryService.GetDirectoryName(nonMatchingChild)).Returns("Other");
 
-        flattener.RemoveNestedFolders(parentPath);
+        await flattener.RemoveNestedFolders(parentPath, CancellationToken.None);
 
         A.CallTo(() => directoryService.Move(matchingChild, parentPath)).MustHaveHappenedOnceExactly();
         A.CallTo(() => directoryService.Delete(matchingChild, false)).MustHaveHappenedOnceExactly();
@@ -128,7 +128,7 @@ public class FolderFlattenerTests
     }
 
     [Fact]
-    public void RemoveNestedFolders_ProcessesNestedDirectoriesRecursively()
+    public async Task RemoveNestedFolders_ProcessesNestedDirectoriesRecursively()
     {
         const string rootPath = @"C:\Root";
         const string level1Path = @"C:\Root\SubDir";
@@ -142,14 +142,14 @@ public class FolderFlattenerTests
         A.CallTo(() => directoryService.GetDirectoryName(level1Path)).Returns("SubDir");
         A.CallTo(() => directoryService.GetDirectoryName(level2Path)).Returns("SubDir");
 
-        flattener.RemoveNestedFolders(rootPath);
+        await flattener.RemoveNestedFolders(rootPath, CancellationToken.None);
 
         A.CallTo(() => directoryService.Move(level2Path, level1Path)).MustHaveHappenedOnceExactly();
         A.CallTo(() => directoryService.Delete(level2Path, false)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public void RemoveNestedFolders_WithDeepNestedMatchingFolders_FlattensAll()
+    public async Task RemoveNestedFolders_WithDeepNestedMatchingFolders_FlattensAll()
     {
         const string rootPath = @"C:\Archive";
         const string level1Path = @"C:\Archive\Archive";
@@ -164,14 +164,14 @@ public class FolderFlattenerTests
         A.CallTo(() => directoryService.GetDirectoryName(level1Path)).Returns("Archive");
         A.CallTo(() => directoryService.GetDirectoryName(level2Path)).Returns("Archive");
 
-        flattener.RemoveNestedFolders(rootPath);
+        await flattener.RemoveNestedFolders(rootPath, CancellationToken.None);
 
         A.CallTo(() => directoryService.Move(level2Path, level1Path)).MustHaveHappened();
         A.CallTo(() => directoryService.Move(level1Path, rootPath)).MustHaveHappened();
     }
 
     [Fact]
-    public void RemoveNestedFolders_DeletesWithNonRecursiveOption()
+    public async Task RemoveNestedFolders_DeletesWithNonRecursiveOption()
     {
         const string parentPath = @"C:\TestDir";
         const string childPath = @"C:\TestDir\TestDir";
@@ -182,7 +182,7 @@ public class FolderFlattenerTests
         A.CallTo(() => directoryService.GetDirectoryName(parentPath)).Returns("TestDir");
         A.CallTo(() => directoryService.GetDirectoryName(childPath)).Returns("TestDir");
 
-        flattener.RemoveNestedFolders(parentPath);
+        await flattener.RemoveNestedFolders(parentPath, CancellationToken.None);
 
         A.CallTo(() => directoryService.Delete(childPath, false)).MustHaveHappenedOnceExactly();
         A.CallTo(() => directoryService.Delete(childPath, true)).MustNotHaveHappened();
