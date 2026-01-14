@@ -36,7 +36,7 @@ public partial class App
         services.AddSingleton<IFileOperations, FileOperationsAdapter>();
         services.AddSingleton<IDirectoryService, DirectoryServiceAdapter>();
         services.AddSingleton<IZipArchiveFactory, ZipArchiveFactory>();
-        services.AddSingleton<IFileDecompressor, FileDecompressor>();
+        services.AddSingleton<IFolderScanner, FolderScanner>();
         services.AddSingleton<IFolderFlattener, FolderFlattener>();
         services.AddSingleton<IDecompressionWorkflow, DecompressionWorkflow>();
         services.AddSingleton<IImageOrganizer, ImageOrganizer>();
