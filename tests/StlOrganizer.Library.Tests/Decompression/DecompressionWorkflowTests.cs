@@ -1,5 +1,4 @@
 using FakeItEasy;
-using Serilog;
 using Shouldly;
 using StlOrganizer.Library.Decompression;
 using StlOrganizer.Library.OperationSelection;

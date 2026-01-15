@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using StlOrganizer.Gui.ViewModels;
+﻿using StlOrganizer.Gui.ViewModels;
 
 namespace StlOrganizer.Gui;
 

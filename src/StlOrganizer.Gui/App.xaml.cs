@@ -2,12 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using StlOrganizer.Gui.ViewModels;
-using StlOrganizer.Library;
 using StlOrganizer.Library.Compression;
 using StlOrganizer.Library.Decompression;
 using StlOrganizer.Library.ImageProcessing;
 using StlOrganizer.Library.OperationSelection;
-using StlOrganizer.Library.SystemAdapters;
 using StlOrganizer.Library.SystemAdapters.AsyncWork;
 using StlOrganizer.Library.SystemAdapters.FileSystem;
 
@@ -38,7 +36,6 @@ public partial class App
         services.AddSingleton<IFileSystem, FileSystemAdapter>();
         services.AddSingleton<IFileOperations, FileOperationsAdapter>();
         services.AddSingleton<IDirectoryService, DirectoryServiceAdapter>();
-        services.AddSingleton<IZipArchiveFactory, ZipArchiveFactory>();
         services.AddSingleton<IDecompressor, Decompressor>();
         services.AddSingleton<IFolderScanner, FolderScanner>();
         services.AddSingleton<IFolderFlattener, FolderFlattener>();

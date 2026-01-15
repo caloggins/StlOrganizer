@@ -10,7 +10,7 @@ public class FolderScanner(
 {
     public async Task FindAndDecompress(
         string folder,
-        IProgress<OrganizerProgress> progress = null,
+        IProgress<OrganizerProgress> progress,
         CancellationToken cancellationToken = default)
     {
         const string extensionToFind = "*.zip";

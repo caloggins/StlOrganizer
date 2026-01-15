@@ -1,7 +1,5 @@
 namespace StlOrganizer.Library.Compression;
 
-using OperationSelection;
-
 public interface ICompressor
 {
     Task Compress(

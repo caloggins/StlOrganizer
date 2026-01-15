@@ -3,14 +3,10 @@ using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using StlOrganizer.Library;
 using StlOrganizer.Library.OperationSelection;
-using StlOrganizer.Library.SystemAdapters;
 using StlOrganizer.Library.SystemAdapters.AsyncWork;
 
 namespace StlOrganizer.Gui.ViewModels;
-
-using System.Windows.Controls;
 
 public partial class MainViewModel : ObservableValidator
 {
@@ -113,7 +109,7 @@ public partial class MainViewModel : ObservableValidator
         try
         {
             IsBusy = true;
-            StatusMessage = $"Executing {SelectedOperation}...";
+            StatusMessage = $"Executing {SelectedOperation.Name}...";
 
             var organizerProgress = new Progress<OrganizerProgress>(o =>
             {
@@ -143,6 +139,4 @@ public partial class MainViewModel : ObservableValidator
             cancellationToken = null;
         }
     }
-    
-    
 }

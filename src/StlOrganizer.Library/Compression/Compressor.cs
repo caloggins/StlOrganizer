@@ -1,15 +1,8 @@
 ﻿using System.IO.Compression;
-using Serilog;
-using StlOrganizer.Library.SystemAdapters.FileSystem;
 
 namespace StlOrganizer.Library.Compression;
 
-using OperationSelection;
-
-public class Compressor(
-    IFileSystem fileSystem,
-    IFileOperations fileOperations,
-    ILogger logger) : ICompressor
+public class Compressor : ICompressor
 {
     public async Task Compress(
         string source,

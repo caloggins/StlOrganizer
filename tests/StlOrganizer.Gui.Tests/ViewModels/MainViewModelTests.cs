@@ -1,9 +1,7 @@
 ﻿using FakeItEasy;
 using Shouldly;
 using StlOrganizer.Gui.ViewModels;
-using StlOrganizer.Library;
 using StlOrganizer.Library.OperationSelection;
-using StlOrganizer.Library.SystemAdapters;
 using StlOrganizer.Library.SystemAdapters.AsyncWork;
 
 namespace StlOrganizer.Gui.Tests.ViewModels;
