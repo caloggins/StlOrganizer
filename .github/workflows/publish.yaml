@@ -21,7 +21,7 @@ jobs:
       RUNTIME: win-x64
 
       SOLUTION: StlOrganizer.sln
-      GUI_PROJECT: src/StlOrganizer.Gui.proj
+      GUI_PROJECT: src/StlOrganizer.Gui/StlOrganizer.Gui.proj
 
       # Staging dirs inside the runner workspace
       STAGING_DIR: artifacts/staging
