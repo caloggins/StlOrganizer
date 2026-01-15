@@ -20,8 +20,8 @@ jobs:
       CONFIGURATION: Release
       RUNTIME: win-x64
 
-      SOLUTION: StlOrganizer/StlOrganizer.sln
-      GUI_PROJECT: StlOrganizer/src/StlOrganizer.Gui.proj
+      SOLUTION: StlOrganizer.sln
+      GUI_PROJECT: src/StlOrganizer.Gui.proj
 
       # Staging dirs inside the runner workspace
       STAGING_DIR: artifacts/staging
@@ -62,7 +62,7 @@ jobs:
       - name: Add README to package
         shell: pwsh
         run: |
-          Copy-Item "StlOrganizer/README.md" "${{ env.STAGING_DIR }}/README.md" -Force
+          Copy-Item "README.md" "${{ env.STAGING_DIR }}/README.md" -Force
 
       - name: Create zip
         shell: pwsh
