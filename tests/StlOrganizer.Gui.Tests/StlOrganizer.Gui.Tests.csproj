@@ -23,7 +23,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\StlOrganizer.Gui\StlOrganizer.Gui.csproj" />
+        <ProjectReference Include="..\..\src\StlOrganizer.Gui\StlOrganizer.Gui.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Home\"/>
     </ItemGroup>
 
 </Project>
