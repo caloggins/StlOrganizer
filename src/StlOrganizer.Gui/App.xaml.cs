@@ -1,7 +1,9 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using StlOrganizer.Gui.ViewModels;
+using StlOrganizer.Gui.Compression;
+using StlOrganizer.Gui.Home;
+using StlOrganizer.Gui.Images;
 using StlOrganizer.Library.Compression;
 using StlOrganizer.Library.Decompression;
 using StlOrganizer.Library.ImageProcessing;
@@ -44,7 +46,17 @@ public partial class App
         services.AddSingleton<ICompressor, Compressor>();
         services.AddSingleton<IArchiveOperationSelector, ArchiveOperationSelector>();
         services.AddSingleton<ICancellationTokenSourceProvider, CancellationTokenSourceProvider>();
-        services.AddTransient<MainViewModel>();
+
+        // ViewModels
+        services.AddTransient<CompressionViewModel>();
+        services.AddTransient<MainWindowViewModel>();
+
+        // Pages
+        services.AddTransient<CompressionPage>();
+        services.AddTransient<HomePage>();
+        services.AddTransient<ImagesPage>();
+
+        // Windows
         services.AddTransient<MainWindow>();
     }
 
